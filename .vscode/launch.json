@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FlagChecker",
+            "request": "launch",
+            "mainClass": "testapp.FlagChecker",
+            "projectName": "testapp"
+        }
+    ]
+}
