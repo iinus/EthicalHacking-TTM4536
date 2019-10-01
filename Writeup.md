@@ -4,7 +4,7 @@ In this task we are given a pcap file, which can be opened with wireshark.
 
 To observere what is going on, we can click "Follow TCP stream" and then it can be seen that there several files being sent by looking at the file  signature in the beginning of the streams.
 
-![Alt text](/figures/comm2.png?raw=true )
+![Alt text](/figures/comm1.png?raw=true )
 
 The, we can extract all the files as http objects into a folder. 
 
