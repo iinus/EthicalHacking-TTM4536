@@ -1,4 +1,22 @@
-# Writeup Communication
+# Writeup PERU
+
+In this task we are given a pcap file, which can be opened with wireshark. 
+To observere what is going on, we can click "Follow TCP stream". We can see that the there is a password token:
+
+![Alt text](/figures/Peru1.png?raw=true )
+
+We try to run the Pyhon command on the token:
+<pre>
+$ python 
+>>> Token='TUNBezU4MDc2MjY2NzZ9'
+>>> print(Token[13:] + Token[:13])
+jY2NzZ9TUNBezU4MDc2M
+</pre>
+
+And the flag is 
+ttm4536{jY2NzZ9TUNBezU4MDc2M}
+
+# Writeup YEMEN
 
 In this task we are given a pcap file, which can be opened with wireshark. 
 
