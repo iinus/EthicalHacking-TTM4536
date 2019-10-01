@@ -1,4 +1,4 @@
-#### Writeup Communication
+# Writeup Communication
 
 In this task we are given a pcap file, which can be opened with wireshark. 
 
@@ -13,17 +13,39 @@ To get information about these objects filetype, file can be run on them:
 $ file * 
 </pre>
 
-We see that all the objects contain data, and recognize several filetypes: RIFF (little-endian) data, Web/P image, PDP-11 pure executable etc. However, object475 is a x.out archive which looks interesting. It does not work to use 7z or unzip to extract the data, but we have all the data in Wireshark. In Wireshark, we can copy all the raw data from the stream belonging to the archive into a new file. As the file signature is the same, it is recognized:
+We see that all the objects contain data, and recognize several filetypes: RIFF (little-endian) data, Web/P image, PDP-11 pure executable etc. However, object475 is a x.out archive which looks interesting. It does not work to use 7z or unzip to extract the data, but we have all the data in Wireshark. In Wireshark, we can copy all the raw data from the stream belonging to the archive into a new file named "RAW". As the file signature is the same, it is recognized:
 
-![Alt text](/figures/comm1.png?raw=true )
+![Alt text](/figures/comm2.png?raw=true )
 <pre>
 [:wiresharkobj0]$ file RAW
 RAW: gzip compressed data, was "who.txt", last modified: Sun Sep 29 07:37:12 2019, from Unix, original size 153525
 </pre>
 
-Running 7z x RAW extracts a text file, who.txt.
+We then extract the content of RAW:
+<pre>
+[wiresharkobj0]$ 7z x RAW
 
-We run cat who.txt and find our flag in the end of the text file:
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=utf8,Utf16=on,HugeFiles=on,64 bits,4 CPUs x64)
+
+Scanning the drive for archives:
+1 file, 51945 bytes (51 KiB)
+
+Extracting archive: RAW
+--
+Path = RAW
+Type = gzip
+Headers Size = 18
+
+Everything is Ok
+
+Size:       153525
+Compressed: 51945
+</pre>
+
+<pre>
+$ cat who.txt
+</pre>
 ![Alt text](/figures/comm3.png?raw=true )
 
 ttm4536{Banana-limk-shake2019}
