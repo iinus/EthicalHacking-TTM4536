@@ -11,7 +11,7 @@ is based on Debian. It comes with a bunch of hacking-tools installed from before
 ## Chapter 2: Network Basics
 [Socket module](https://docs.python.org/3/library/socket.html)
 
-#### TCP client
+### TCP client
 Three steps:
 * Create socket: client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 * Connect the client: client.connect(target_host, target_port)
@@ -21,12 +21,12 @@ Important parameters:
 * AF_INET: we're using standard ipv4 address or a common hostname.
 * SOC_STREAM: this will be a TCP client. 
 
-#### UDP client
+### UDP client
 Similar to TCP client, but:
 * UDP is connectionless so we don't connect the client. 
 * SOC_DGRAM: says it will be a UDP client (instead of SOC_STREAM)
 
-#### TCP server
+### TCP server
 * Create socket
 * server.bind(ip, port):  _bind()_ is used to associate the socket with the server address. 
 * start to listen: _server.listen(n)_ n means that we have maximum n connections. 
@@ -35,7 +35,7 @@ a client socket as param.
 * Wait for incoming connections. When a client connects, we receive the client socket. Create
 a threading object that points to the client handler function. Pass the client socket with it. 
 
-#### Replacing netcat
+### Replacing netcat
 [netcat](https://en.wikipedia.org/wiki/Netcat) - used to read or write from network connections using
 either UDP or TCP. 
 
@@ -55,9 +55,9 @@ to netcat. Then, writing your own can be useful.
 * After the server binds and the client connects, we can start with command_shell and commands.
 * Use subprocess to execute commands. 
 
-#### TCP Proxy
+### TCP Proxy
 
-#### SSH client with paramiko
+### SSH client with paramiko
 [Paramiko](https://www.paramiko.org/)
 * Paramiko is a python implementation of SSHv2.
 * _set_missing_host_key_policy(policy)_ - Set policy to use when connecting to servers without a known host key.
@@ -70,7 +70,7 @@ This is can be used to open a session.
 ## MISC
 ** Other questions we might get ** 
 
-#### What is the difference between stored- and reflected xss?
+### What is the difference between stored- and reflected xss?
 **Stored attacks** are those where the injected script is permanently stored on the target servers,
 such as in a database, in a message forum, visitor log, comment field, etc. 
 The victim then retrieves the malicious script from the server when it requests the stored information.
@@ -84,7 +84,7 @@ the injected code travels to the vulnerable web site, which reflects the attack 
 The browser then executes the code because it came from a "trusted" server. 
 Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
 
-#### Everything you know about SQL Injection Attacks?
+### Everything you know about SQL Injection Attacks?
 SQL injection is a kind of injection attack where an attacker injects SQL queries through an input field in the client app.
 It is one of the most common web-hacks.
 
@@ -145,3 +145,12 @@ Whitelisting can be a very effective means of enforcing strict input validation 
     * Target fields that are not quoted
     * Find ways to bypass the need for certain escaped meta-characters 
     * Use stored procedures to hide the injected meta-characters 
+
+### When setting up a virtual machine in VirtualBox, explain in brief as many system components as you can, that should be defined for the machine.
+* Operating system
+* Size of base RAM memory
+* CPUs
+* Size of video memory
+* Size of hard disk 
+* Network adapter type
+* Shared folders
