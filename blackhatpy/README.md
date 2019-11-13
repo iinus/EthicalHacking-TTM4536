@@ -38,6 +38,7 @@ a threading object that points to the client handler function. Pass the client s
 #### Replacing netcat
 [netcat](https://en.wikipedia.org/wiki/Netcat) - used to read or write from network connections using
 either UDP or TCP. 
+
 [subprocess](https://docs.python.org/3/library/subprocess.html) - The subprocess module allows you to spawn new processes,
  connect to their input/output/error pipes, and obtain their return codes.  
 
@@ -50,6 +51,18 @@ to netcat. Then, writing your own can be useful.
 [replacing netcat with python](https://www.cybrary.it/0p3n/create-netcat-replacement-python-part-1/) - article
 
 * Specify options like target_host, target_port, command, command_shell. 
-* Netcat python will have to main functionalities: listen (server) and not listen (client)
+* Netcat python will have two main functionalities: listen (server) and not listen (client)
 * After the server binds and the client connects, we can start with command_shell and commands.
 * Use subprocess to execute commands. 
+
+#### TCP Proxy
+
+#### SSH client with paramiko
+[Paramiko](https://www.paramiko.org/)
+* Paramiko is a python implementation of SSHv2.
+* _set_missing_host_key_policy(policy)_ - Set policy to use when connecting to servers without a known host key.
+* _paramiko.AutoAddPolicy_ - Policy for automatically adding the hostname and new host key to the local HostKeys object, and saving it.
+* _connect_ - connect the client to a SSH server and authenticate it. 
+* _ssh_client.get_transport().open_session()_ - _get_transport()_ returns the underlying Transport object for this SSH connection.
+This is can be used to open a session. 
+* _ssh_session.exec_command(command)_ - execute a command on the ssh server
