@@ -83,3 +83,65 @@ When a user is tricked into clicking on a malicious link, submitting a specially
 the injected code travels to the vulnerable web site, which reflects the attack back to the user’s browser. 
 The browser then executes the code because it came from a "trusted" server. 
 Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
+
+#### Everything you know about SQL Injection Attacks?
+SQL injection is a kind of injection attack where an attacker injects SQL queries through an input field in the client app.
+It is one of the most common web-hacks.
+
+**Example**
+
+Consider an application that lets users log in with a username and password. If a user submits the username admin
+and the password pwd123, the application checks the credentials by performing the following SQL query:
+<pre>
+SELECT * FROM users WHERE username = 'admin' AND password = 'pwd123'
+</pre>
+If the query returns the details of a user, then the login is successful. Otherwise, it is rejected.
+
+Here, an attacker can log in as any user without a password simply by using the SQL comment sequence -- 
+to remove the password check from the WHERE clause of the query. For example, submitting the username admin'-- 
+and a blank password results in the following query:
+<pre>
+SELECT * FROM users WHERE username = 'admin'--' AND password = ''
+</pre>
+This query returns the user whose username is admin and successfully logs the attacker in as that user. 
+
+Another classical example:
+<pre>
+SELECT * FROM Users WHERE UserId = 105 OR 1=1;
+__Always true__
+</pre>
+
+**Tools:** 
+We can use tools like [sqlmap](http://sqlmap.org/) to automate the detection and exploitation of sql injection flaws.
+
+**Prevention (in preferred order):** 
+1) Prepared Statements: Parameterized queries force the developer to first define all the SQL code, and then pass in each parameter to the query later. 
+This coding style allows the database to distinguish between code and data, regardless of what user input is supplied.
+Prepared statements ensure that an attacker is not able to change the intent of a query, even if SQL commands are inserted by an attacker.
+ In the safe example below, if an attacker were to enter the userID of tom' or '1'='1, 
+ the parameterized query would not be vulnerable and would instead look for a username which literally matched the entire string tom' or '1'='1.
+ <pre>
+ // Example: safe C# prepared statements
+ 
+ String query = "SELECT account_balance FROM user_data WHERE user_name = ?";
+try {
+  OleDbCommand command = new OleDbCommand(query, connection);
+  command.Parameters.Add(new OleDbParameter("customerName", CustomerName Name.Text));
+  OleDbDataReader reader = command.ExecuteReader();
+  // …
+} catch (OleDbException se) {
+  // error handling
+}
+ </pre>
+2) Stored procedures: typically help prevent SQL injection attacks by limiting the types of statements that can be passed to their parameters.
+ However, there are many ways around the limitations and many interesting statements that can still be passed to stored procedures.
+  Stored procedures can prevent some exploits, but they will not make your application secure against SQL injection attacks. 
+3) Whitelisting: One traditional approach to preventing SQL injection attacks is to handle them as an input validation 
+problem and either accept only characters from a whitelist of safe values. 
+Whitelisting can be a very effective means of enforcing strict input validation rules, but parameterized SQL statements require
+ less maintenance and can offer more guarantees with respect to security.
+4) Blacklisting: Another traditional approach that tries to identify and escape a blacklist of potentially malicious values.
+ As is almost always the case, blacklisting is riddled with loopholes that make it ineffective at preventing SQL injection attacks. For example, attackers can: 
+    * Target fields that are not quoted
+    * Find ways to bypass the need for certain escaped meta-characters 
+    * Use stored procedures to hide the injected meta-characters 
