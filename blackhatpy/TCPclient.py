@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import socket
 
 server_address = ('localhost', 1234)

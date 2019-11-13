@@ -1,5 +1,7 @@
 # EthicalHacking
 
+See blackhatpy for curriculum and python scripts. 
+
 # Writeup PERU
 
 In this task we are given a pcap file, which can be opened with wireshark. 
