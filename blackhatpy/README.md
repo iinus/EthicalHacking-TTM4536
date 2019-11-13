@@ -66,3 +66,20 @@ to netcat. Then, writing your own can be useful.
 * _ssh_client.get_transport().open_session()_ - _get_transport()_ returns the underlying Transport object for this SSH connection.
 This is can be used to open a session. 
 * _ssh_session.exec_command(command)_ - execute a command on the ssh server
+
+## MISC
+** Other questions we might get ** 
+
+#### What is the difference between stored- and reflected xss?
+**Stored attacks** are those where the injected script is permanently stored on the target servers,
+such as in a database, in a message forum, visitor log, comment field, etc. 
+The victim then retrieves the malicious script from the server when it requests the stored information.
+Stored XSS is also sometimes referred to as Persistent or Type-I XSS.
+
+**Reflected attacks** are those where the injected script is reflected off the web server, such as in an error message, 
+search result, or any other response that includes some or all of the input sent to the server as part of the request. 
+Reflected attacks are delivered to victims via another route, such as in an e-mail message, or on some other website.
+When a user is tricked into clicking on a malicious link, submitting a specially crafted form, or even just browsing to a malicious site,
+the injected code travels to the vulnerable web site, which reflects the attack back to the user’s browser. 
+The browser then executes the code because it came from a "trusted" server. 
+Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
