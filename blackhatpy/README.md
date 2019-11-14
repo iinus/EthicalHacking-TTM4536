@@ -72,16 +72,19 @@ This is can be used to open a session.
 [Socket module](https://docs.python.org/3/library/socket.html)
 
 * Why UDP? Simple and no overhead. 
-* Windows requires some extra flags through a Socket Input/Output Control (IOCTL). This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuous_mode). 
+* Windows requires some extra flags through a Socket Input/Output Control (IOCTL). 
+This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuous_mode). 
 * _socket.IPPROTO_IP_: Windows allow us to sniff all incoming packets
 * _socket.IPPROTO_ICMP_: Linux forces us to specify ICMP. 
 * _socket.SOCK_RAW_: In the sniffer, we create a raw socket 
 * _raw_socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)_: set parameters to include IP headers. 
+* [netaddr](https://pypi.org/project/netaddr/) - to cover subnets. 
 
 **Decoding IP Layer**
 * Goal: decode from binary to human-readable.
 * [ctypes](https://docs.python.org/3/library/ctypes.html) - we're using this module to create a C-like structure to map 
-the first 20 bytes into a readable IP header. 
+the first 20 bytes into a readable IP header. We can also use this module to create a C-like structure to decode ICMP responses.
+* [struct](https://docs.python.org/3/library/struct.html) - this module performs conversions between Python values and C structs represented as Python bytes objects.
 
 ## Chapter 4: Owning the network with Scapy
 

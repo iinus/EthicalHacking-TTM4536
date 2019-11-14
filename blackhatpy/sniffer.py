@@ -2,14 +2,18 @@
 import os
 import socket
 import struct
+import time
+import threading
+import sys
 from ctypes import *
+from netaddr import IPNetwork, IPAddress
 
-host_to_listen_on = "10.24.33.39"  # E.g. use ifconfig and set this to your ip
+host_to_listen_on = ""  # E.g. use ifconfig and set this to your ip
+subnet = "129.241.0.0/24"
 socket_protocol = socket.IPPROTO_ICMP
 windows = "nt"
 
 
-# our IP header
 class IP(Structure):
     _fields_ = [
         ("ihl", c_ubyte, 4),
@@ -42,6 +46,38 @@ class IP(Structure):
             self.protocol = str(self.protocol_num)
 
 
+class ICMP(Structure):
+    _fields_ = [
+        ("type", c_ubyte, 4),
+        ("code", c_ubyte, 4),
+        ("checksum", c_ushort),
+        ("unused", c_ushort),
+        ("next_hop_mtu", c_ushort),
+    ]
+
+    def __new__(self, socket_buffer):
+        return self.from_buffer_copy(socket_buffer)
+
+    def __init__(self, socket_buffer):
+        pass
+
+
+def calculate_where_ICMP_starts(header_length, raw_buffer):
+    offset = header_length * 4
+    ICMP_buffer = raw_buffer[offset:offset + sizeof(ICMP)]
+    return ICMP_buffer
+
+
+def udp_sender():
+    time.sleep(5)
+    sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    for ip in IPNetwork(subnet):
+        try:
+            sender_socket.sendto("PyScanner".encode(), ("%s" % ip, 65212))
+        except:
+            pass
+
 if os.name == windows:
     socket_protocol = socket.IPPROTO_IP
 
@@ -52,6 +88,20 @@ raw_socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 if os.name == windows:
     raw_socket.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
-read_single_raw_packet = raw_socket.recvfrom(65565)[0]
-ip_header = IP(read_single_raw_packet[0:20])
-print("[*] %s %s ---> %s" % (ip_header.protocol, ip_header.src_address, ip_header.dst_address))
+
+thread = threading.Thread(target=udp_sender())
+thread.start()
+
+try:
+    while True:
+        read_single_raw_packet = raw_socket.recvfrom(65565)[0]
+        ip_header = IP(read_single_raw_packet[0:20])
+        print("[IP-protocol] %s %s ---> %s" % (ip_header.protocol, ip_header.src_address, ip_header.dst_address))
+
+        if ip_header.protocol == 'ICMP':
+            ICMP_buffer = calculate_where_ICMP_starts(ip_header.ihl, read_single_raw_packet)
+            ICMP_header = ICMP(ICMP_buffer)
+            print("[ICMP] Type: %d Code: %d" % (ICMP_header.type, ICMP_header.code))
+
+except:
+    sys.exit()
