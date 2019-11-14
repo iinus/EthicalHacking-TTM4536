@@ -57,8 +57,8 @@ def handle_client(client_socket):
 
     if command_shell:
         while True:
-            print("sending <BHP-shell #> ")
-            client_socket.send("<BHP-shell #> ".encode())
+            print("sending <PyCat-shell #> ")
+            client_socket.send("<PyCat-shell #> ".encode())
             cmd_buffer = ""
             while "\n" not in cmd_buffer:
                 cmd_buffer += client_socket.recv(1024).decode()
