@@ -87,6 +87,16 @@ the first 20 bytes into a readable IP header. We can also use this module to cre
 * [struct](https://docs.python.org/3/library/struct.html) - this module performs conversions between Python values and C structs represented as Python bytes objects.
 
 ## Chapter 4: Owning the network with Scapy
+[Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
+sniff and dissect and forge network packets. This capability allows construction of tools that can probe, scan or attack networks.
+
+**Build a sniffer with scapy**
+* _sniff(filter="", iface="any", prn=function, count=N)_ 
+* _filter_ is for defining a BPF filter (like in Wireshark). If it is left blank, then we sniff all packets. 
+If we want to sniff HTTP packets, we can set the filter to TCP port 80. 
+* _iface_ is for specifying network interface. 
+* _prn_ is is used to specify a callback function for that is called every time a packet matches the filter.
+* count is used to specify how many packets scapy should sniff. 
 
 ## MISC
 ** Other questions we might get ** 
