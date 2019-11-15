@@ -11,6 +11,9 @@ import subprocess
 
 command_shell = False
 execute_cmd = ""
+color_cmd = '\033[95m\033[1m'
+color_text = '\33[96m\033[1m'
+color_end = '\033[0m'
 
 
 def client_sender(user_buffer, target_host, target_port):
@@ -58,11 +61,12 @@ def handle_client(client_socket):
     if command_shell:
         while True:
             print("sending <PyCat-shell #> ")
-            client_socket.send("<PyCat-shell #> ".encode())
+            message = color_cmd + " <PyCat-shell #>"
+            client_socket.send(message.encode())
             cmd_buffer = ""
             while "\n" not in cmd_buffer:
                 cmd_buffer += client_socket.recv(1024).decode()
-                response = run_command(str(cmd_buffer))
+                response = color_text + run_command(str(cmd_buffer)) + color_end
                 client_socket.send(response.encode())
 
 
@@ -75,7 +79,7 @@ def run_command(command):
     except:
         print("[-] Failed to execute command :(")
 
-    return str(output)
+    return (output.stdout).decode('utf-8')
 
 
 def main():

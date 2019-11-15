@@ -4,10 +4,18 @@ The book is about writing network sniffers, manipulating packets, infecting virt
 Unfortunately, it is written in Python 2.7. This summary is written in relation to the exam in **TTM4536**. So I
 extracted the stuff the professor cares about the most + a bit DuckDuckGoing. 
 
+1. [ Chapter 1](#chap1)
+2. [ Chapter 2](#chap2)
+3. [ Chapter 3](#chap3)
+4. [ Chapter 4](#chap4)
+5. [ MISC (other stuff we can be asked) ](#misc)
+
+<a name="chap1"></a>
 ## Chapter 1 
 The book walks through setting up a VM for Kali Linux (but I'm sticking to my Mac<3 for obvious reasons). Kali was designed by Offensive Security, and 
 is based on Debian. It comes with a bunch of hacking-tools installed from before, e.g. Hydra (password cracking) and Metasploit (known exploits).
 
+<a name="chap2"></a>
 ## Chapter 2: Network Basics
 [Socket module](https://docs.python.org/3/library/socket.html)
 
@@ -55,6 +63,9 @@ to netcat. Then, writing your own can be useful.
 * After the server binds and the client connects, we can start with command_shell and commands.
 * Use subprocess to execute commands. 
 
+Try it out! 
+![Alt text](figures/pycat.png?raw=true)
+
 ### TCP Proxy
 
 ### SSH client with paramiko
@@ -67,6 +78,7 @@ to netcat. Then, writing your own can be useful.
 This is can be used to open a session. 
 * _ssh_session.exec_command(command)_ - execute a command on the ssh server
 
+<a name="chap3"></a>
 ## Chapter 3: The network
 ### Building a UDP host discovery tool 
 [Socket module](https://docs.python.org/3/library/socket.html)
@@ -86,6 +98,7 @@ This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuou
 the first 20 bytes into a readable IP header. We can also use this module to create a C-like structure to decode ICMP responses.
 * [struct](https://docs.python.org/3/library/struct.html) - this module performs conversions between Python values and C structs represented as Python bytes objects.
 
+<a name="chap4"></a>
 ## Chapter 4: Owning the network with Scapy
 [Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
 sniff and dissect and forge network packets. This capability allows construction of tools that can probe, scan or attack networks.
@@ -138,7 +151,7 @@ def poison_the_target(gateway_ip, target_mac, source_ip):
 </pre>
 * Step 3: Restore the ARP tables of the machine.
 
-
+<a name="misc"></a>
 ## MISC
 ** Other questions we might get ** 
 
