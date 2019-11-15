@@ -90,13 +90,54 @@ the first 20 bytes into a readable IP header. We can also use this module to cre
 [Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
 sniff and dissect and forge network packets. This capability allows construction of tools that can probe, scan or attack networks.
 
-**Build a sniffer with scapy**
+Install: 
+<pre> pip install scapy
+</pre>
+
+To list available commands, use _lsc()_.
+To list supported protocols, use _ls()_. 
+To see the fields of a layer, use _ls(layer)_:
+![Alt text](/figures/ls(layer).png?raw=true)
+
+### Build a sniffer with scapy
 * _sniff(filter="", iface="any", prn=function, count=N)_ 
 * _filter_ is for defining a BPF filter (like in Wireshark). If it is left blank, then we sniff all packets. 
 If we want to sniff HTTP packets, we can set the filter to TCP port 80. 
 * _iface_ is for specifying network interface. 
 * _prn_ is is used to specify a callback function for that is called every time a packet matches the filter.
-* count is used to specify how many packets scapy should sniff. 
+* _count_ is used to specify how many packets scapy should sniff. 
+
+### ARP poisoning with Scapy
+The Address Resolution Protocol (ARP) is a widely used communications protocol for resolving Internet layer addresses into link layer addresses. 
+
+[ARP  vulnerability](https://en.wikipedia.org/wiki/ARP_spoofing#ARP_vulnerabilities) - 
+When an Internet Protocol (IP) datagram is sent from one host to another in a local area network,
+the destination IP address must be resolved to a MAC address for transmission via the data link layer.
+When another host's IP address is known, and its MAC address is needed, a broadcast packet is sent out on the local network.
+This packet is known as an ARP request. The destination machine with the IP in the ARP request then responds with an ARP reply
+that contains the MAC address for that IP.
+
+
+[ARP poisoning](https://doubleoctopus.com/security-wiki/threats-and-tools/address-resolution-protocol-poisoning/) -
+Address Resolution Protocol (ARP) poisoning is when an attacker sends falsified ARP messages over a local area network 
+(LAN) to link an attacker’s MAC address with the IP address of a legitimate computer or server on the network. 
+Once the attacker’s MAC address is linked to an authentic IP address, the attacker can receive any messages directed
+to the legitimate MAC address. As a result, the attacker can intercept, modify or block communicates to the legitimate MAC address.
+
+**ARP cache poisoning with Scapy**
+
+[Article](https://medium.com/datadriveninvestor/arp-cache-poisoning-using-scapy-d6711ecbe112)
+* Requirement: LAN access
+* Use _netstat -rn_ to find gateway ip and then _arp -a_ to find the associated ARP cache entry. 
+* Step 1: Use _getmacbyip(ip)_ to find the MAC address of the target and the gateway ip.  
+* Step 2: poison the target:
+<pre>
+def poison_the_target(gateway_ip, target_mac, source_ip):
+	poison_target = ARP(op=2, pdst=target_ip, psrc=gateway_ip, hwdst= target_mac)
+	send(poison_target, verbose=False)
+</pre>
+* Step 3: Restore the ARP tables of the machine.
+
 
 ## MISC
 ** Other questions we might get ** 

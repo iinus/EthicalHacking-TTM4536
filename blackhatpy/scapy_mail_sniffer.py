@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# You can test the program by using mailx (unix)
+
 from scapy.all import *
 
 
