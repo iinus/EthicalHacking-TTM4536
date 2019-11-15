@@ -97,7 +97,7 @@ Install:
 To list available commands, use _lsc()_.
 To list supported protocols, use _ls()_. 
 To see the fields of a layer, use _ls(layer)_:
-![Alt text](/figures/ls(layer).png?raw=true)
+![Alt text](figures/ls.png?raw=true)
 
 ### Build a sniffer with scapy
 * _sniff(filter="", iface="any", prn=function, count=N)_ 
