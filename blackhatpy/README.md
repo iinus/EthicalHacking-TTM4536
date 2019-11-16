@@ -1,7 +1,7 @@
 # Summary
 _Black Hat Python_ was published by Justin Seitz in 2014.
 The book is about writing network sniffers, manipulating packets, infecting virtual machines, creating stealthy trojans, and more. 
-Unfortunately, it is written in Python 2.7. This summary is written in relation to the exam in **TTM4536**. So I
+Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3 without problem). This summary is written in relation to the exam in **TTM4536**. So I
 extracted the stuff the professor cares about the most + a bit DuckDuckGoing. 
 
 1. [ Chapter 1](#chap1)
@@ -64,6 +64,7 @@ to netcat. Then, writing your own can be useful.
 * Use subprocess to execute commands. 
 
 Try it out! 
+
 ![Alt text](figures/pycat.png?raw=true)
 
 ### TCP Proxy
@@ -100,24 +101,37 @@ the first 20 bytes into a readable IP header. We can also use this module to cre
 
 <a name="chap4"></a>
 ## Chapter 4: Owning the network with Scapy
+** BTW ** After the book was published, Scapy got more functionality - some of the functions in the book are now doing stuff
+that Scapy already can. 
+
 [Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
 sniff and dissect and forge network packets. This capability allows construction of tools that can probe, scan or attack networks.
 
 Install: 
-<pre> pip install scapy
+<pre> $ pip install scapy
 </pre>
 
+You can start a scapy interactive shell to try it out by typing _scapy_ in your terminal. 
+
 To list available commands, use _lsc()_.
+
 To list supported protocols, use _ls()_. 
+
 To see the fields of a layer, use _ls(layer)_:
+
 ![Alt text](figures/ls.png?raw=true)
 
 ### Build a sniffer with scapy
 * _sniff(filter="", iface="any", prn=function, count=N)_ 
 * _filter_ is for defining a BPF filter (like in Wireshark). If it is left blank, then we sniff all packets. 
-If we want to sniff HTTP packets, we can set the filter to TCP port 80. 
+E.g.: filter="tcp port 80 or tcp port 443". 
 * _iface_ is for specifying network interface. 
-* _prn_ is is used to specify a callback function for that is called every time a packet matches the filter.
+* _prn_ is is used to specify a callback function for that is called every time a packet matches the filter. As a simple example,
+you can just print the captured packet in the callback function: 
+<pre>
+def packet_callback(packet):
+    print(packet.show())
+</pre>
 * _count_ is used to specify how many packets scapy should sniff. 
 
 ### ARP poisoning with Scapy
@@ -129,7 +143,6 @@ the destination IP address must be resolved to a MAC address for transmission vi
 When another host's IP address is known, and its MAC address is needed, a broadcast packet is sent out on the local network.
 This packet is known as an ARP request. The destination machine with the IP in the ARP request then responds with an ARP reply
 that contains the MAC address for that IP.
-
 
 [ARP poisoning](https://doubleoctopus.com/security-wiki/threats-and-tools/address-resolution-protocol-poisoning/) -
 Address Resolution Protocol (ARP) poisoning is when an attacker sends falsified ARP messages over a local area network 
@@ -143,13 +156,26 @@ to the legitimate MAC address. As a result, the attacker can intercept, modify o
 * Requirement: LAN access
 * Use _netstat -rn_ to find gateway ip and then _arp -a_ to find the associated ARP cache entry. 
 * Step 1: Use _getmacbyip(ip)_ to find the MAC address of the target and the gateway ip.  
-* Step 2: poison the target:
+* Step 2: poison the target (and equivalent for the target gateway):
 <pre>
 def poison_the_target(gateway_ip, target_mac, source_ip):
 	poison_target = ARP(op=2, pdst=target_ip, psrc=gateway_ip, hwdst= target_mac)
 	send(poison_target, verbose=False)
 </pre>
 * Step 3: Restore the ARP tables of the machine.
+
+### pcap and scapy 
+[pcap](https://en.wikipedia.org/wiki/Pcap) - pcap is a an API for capturing network traffic. 
+Unix-like systems implement pcap in the _libpcap_ library. For Windows, there is a port of libpcap named _Npcap_.
+
+* If you want a pcap file to test on, run:
+<pre>
+$ tshark  -T fields -e  data.data -e frame.time -w Eavesdrop_Data.pcap > Eavesdrop_Data.txt -F pcap -c 1000
+</pre>
+When you run this, it saves two files in the directory, a Pcap file and a text file after it captures 1000 packets. 
+The output is a time stamp and whatever data is captured.
+* _rdpcap(pcap_file)_: Read pcap file with scapy
+* _wrpcap(pcap_file)_: Write to a pcap file with scapy
 
 <a name="misc"></a>
 ## MISC
