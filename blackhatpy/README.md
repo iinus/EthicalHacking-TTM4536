@@ -168,6 +168,8 @@ def poison_the_target(gateway_ip, target_mac, source_ip):
 [pcap](https://en.wikipedia.org/wiki/Pcap) - pcap is a an API for capturing network traffic. 
 Unix-like systems implement pcap in the _libpcap_ library. For Windows, there is a port of libpcap named _Npcap_.
 
+[Writeup HTB about scapy and pcap](https://kitctf.de/writeups/hitbctf/special_delivery)
+
 * If you want a pcap file to test on, run:
 <pre>
 $ tshark  -T fields -e  data.data -e frame.time -w Eavesdrop_Data.pcap > Eavesdrop_Data.txt -F pcap -c 1000
@@ -176,6 +178,20 @@ When you run this, it saves two files in the directory, a Pcap file and a text f
 The output is a time stamp and whatever data is captured.
 * _rdpcap(pcap_file)_: Read pcap file with scapy
 * _wrpcap(pcap_file)_: Write to a pcap file with scapy
+* Instead of following a stream in Wireshark, it is possible to do the same thing with Scapy:
+<pre>
+scapy_read_pcap = rdpcap(pcap_file)
+sessions = scapy_read_pcap.sessions()
+</pre>
+* Then you can extract the info you want. E.g. if you want to extract all the cleartext traffic over TCP:
+<pre>
+for session in sessions:
+    for packet in sessions[session]:
+        if packet[TCP].sport == 80 or packet[TCP].dport == 80:
+            print('[*] TCP \n' + bytes(packet[TCP].payload).decode('utf-8'))
+</pre>
+* You can extract info from other layers that Scapy support as well. An search for patterns with regular expressions (use the module _re_ in python)
+
 
 <a name="misc"></a>
 ## MISC
