@@ -9,9 +9,9 @@ extracted the stuff the professor cares about the most + a bit DuckDuckGoing.
 2. [ Chapter 2](#chap2)
 3. [ Chapter 3](#chap3)
 4. [ Chapter 4](#chap4)
-5. [ Chapter 4](#chap5)
-6. [ Chapter 4](#chap6)
-7. [ Chapter 4](#chap7)
+5. [ Chapter 5](#chap5)
+6. [ Chapter 6](#chap6)
+7. [ Chapter 7](#chap7)
 8. [ MISC (other stuff we can be asked) ](#misc)
 
 <a name="chap1"></a>
