@@ -4,11 +4,15 @@ The book is about writing network sniffers, manipulating packets, infecting virt
 Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3 without problem). This summary is written in relation to the exam in **TTM4536**. So I
 extracted the stuff the professor cares about the most + a bit DuckDuckGoing. 
 
+#### Content
 1. [ Chapter 1](#chap1)
 2. [ Chapter 2](#chap2)
 3. [ Chapter 3](#chap3)
 4. [ Chapter 4](#chap4)
-5. [ MISC (other stuff we can be asked) ](#misc)
+5. [ Chapter 4](#chap5)
+6. [ Chapter 4](#chap6)
+7. [ Chapter 4](#chap7)
+8. [ MISC (other stuff we can be asked) ](#misc)
 
 <a name="chap1"></a>
 ## Chapter 1 
@@ -190,8 +194,55 @@ for session in sessions:
         if packet[TCP].sport == 80 or packet[TCP].dport == 80:
             print('[*] TCP \n' + bytes(packet[TCP].payload).decode('utf-8'))
 </pre>
-* You can extract info from other layers that Scapy support as well. An search for patterns with regular expressions (use the module _re_ in python)
+* You can extract info from other layers that Scapy support as well. It is possible to search for patterns with regular expressions (use the module _re_ in python)
 
+<a name="chap5"></a>
+## Chapter 5: Web hackery
+### Web Security Dojo 
+[Web Security Dojo](https://www.owasp.org/images/5/5c/Slides-WebSecurityDojo.pdf) - a self-contained environment for web 
+security testing. Various security testing tools and vulnerable web applications added to a clean install of Ubuntu.
+Tools + target = Dojo. 
+**Download:** Download latest Dojo version, and import it in VirtualBox with File --> Import Appliance.    
+**Configuring network adapter:** by default, the network adapter in virtual box is set to NAT. 
+This default network mode is sufficient for users who wish to use a VM just for internet access, for example. If you want to
+communicate between a kali VM and the Dojo VM, you need to change the network adapter to NAT network. This mode is similar to 
+NAT, but the machines can now communicate with each other. The differences between those modes is shown in the figures below.
+![Alt text](figures/NAT.png?raw=true)
+
+![Alt text](figures/NATNetwork.png?raw=true)
+
+However, if you don't want to use VMs, you can test scripts against e.g. http://testphp.vulnweb.com/. 
+### Python and web  
+Note that the book uses urllib2, but this one is not appreciated in python 3. 
+The urllib2 module has been split across several modules in Python 3 named urllib.request and urllib.error. I'll stick to 
+Python 3 as we will get full scores using this instead :) An even simpler python module in Pyhton 3 is 
+[Requests](https://requests.readthedocs.io/en/master/) - "an elegant and simple HTTP library for Python, built for human beings."
+
+With urllib2:
+<pre>
+import urllib2
+
+body = urllib2.urlopen("https://vg.no")
+
+print body.read()
+</pre>
+With requests:
+<pre>
+import requests
+
+response = requests.get('https://vg.no')
+
+print(response.content)
+</pre>
+ 
+### Web_app_mapper.py
+A script for hunting all files that are reachable on the remote target. 
+
+<a name="chap6"></a>
+## Chapter 6: Extending Burp Proxy
+
+<a name="chap7"></a>
+## Chapter 7: Github command and control
 
 <a name="misc"></a>
 ## MISC
@@ -274,6 +325,7 @@ Whitelisting can be a very effective means of enforcing strict input validation 
     * Use stored procedures to hide the injected meta-characters 
 
 ### When setting up a virtual machine in VirtualBox, explain in brief as many system components as you can, that should be defined for the machine.
+[Virtual box settings](https://www.nakivo.com/blog/virtualbox-network-setting-guide/) - a complete guide. 
 * Operating system
 * Size of base RAM memory
 * CPUs
@@ -281,3 +333,33 @@ Whitelisting can be a very effective means of enforcing strict input validation 
 * Size of hard disk 
 * Network adapter type
 * Shared folders
+
+### In order to speed up the hacking that a function “do_some_hack” is doing we want to run 10 instances of that function in parallel. How can we achieve that in Python?
+We can use the Python module threading:
+<pre>
+import threading
+
+def do_some_hack():
+    print("hacking..")
+    return 
+
+for i in range(10): 
+    t = threading.Thread(target=do_some_hack)
+    t.start()
+</pre>
+
+### Is there other ways to speed up python?
+[multiprocessing](https://docs.python.org/2/library/multiprocessing.html) - multiprocessing is a package that supports spawning processes using an API similar to the threading module.
+
+With multiprocessing (same example as above):
+<pre>
+from multiprocessing import Process
+
+def do_some_hack():
+    print("hacking..")
+    return 
+
+for i in range(10): 
+    process = Process(target=do_some_hack)
+    t.start()
+</pre>
