@@ -105,7 +105,7 @@ the first 20 bytes into a readable IP header. We can also use this module to cre
 
 <a name="chap4"></a>
 ## Chapter 4: Owning the network with Scapy
-** BTW ** After the book was published, Scapy got more functionality - some of the functions in the book are now doing stuff
+> After the book was published, Scapy got more functionality - some of the functions in the book are now doing stuff
 that Scapy already can. 
 
 [Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
@@ -126,10 +126,11 @@ To see the fields of a layer, use _ls(layer)_:
 ![Alt text](figures/ls.png?raw=true)
 
 ### Build a sniffer with scapy
+* Import: _from scapy.all import *_
 * _sniff(filter="", iface="any", prn=function, count=N)_ 
 * _filter_ is for defining a BPF filter (like in Wireshark). If it is left blank, then we sniff all packets. 
-E.g.: filter="tcp port 80 or tcp port 443". 
-* _iface_ is for specifying network interface. 
+Example: filter="tcp port 80 or tcp port 443". 
+* _iface_ is for specifying network interface. Example: iface="en0"
 * _prn_ is is used to specify a callback function for that is called every time a packet matches the filter. As a simple example,
 you can just print the captured packet in the callback function: 
 <pre>
@@ -212,30 +213,35 @@ NAT, but the machines can now communicate with each other. The differences betwe
 ![Alt text](figures/NATNetwork.png?raw=true)
 
 However, if you don't want to use VMs, you can test scripts against e.g. http://testphp.vulnweb.com/. 
-### Python and web  
-Note that the book uses urllib2, but this one is not appreciated in python 3. 
-The urllib2 module has been split across several modules in Python 3 named urllib.request and urllib.error. I'll stick to 
+### Python and web 
+>  Note that the book uses urllib2, but this one is not appreciated in python 3.
+ The urllib2 module has been split across several modules in Python 3 named urllib.request and urllib.error. I'll stick to 
 Python 3 as we will get full scores using this instead :) An even simpler python module in Pyhton 3 is 
 [Requests](https://requests.readthedocs.io/en/master/) - "an elegant and simple HTTP library for Python, built for human beings."
 
+#### Disguise browsing as Googlebot from Python
 With urllib2:
 <pre>
 import urllib2
 
-body = urllib2.urlopen("https://vg.no")
+url = "https://vg.no"
+headers['User-Agent'] = "Googlebot"
 
-print body.read()
+request = urllib2.Request(url, headers=headers)
+
+response = urllib2.urlopen(request)
 </pre>
 With requests:
 <pre>
 import requests
 
-response = requests.get('https://vg.no')
+url = "https://vg.no"
+headers = {'user-agent': 'Googlebot'}
 
-print(response.content)
+response = requests.get(url, headers=headers)
 </pre>
  
-### Web_app_mapper.py
+#### Web_app_mapper.py
 A script for hunting all files that are reachable on the remote target. 
 
 <a name="chap6"></a>
@@ -243,6 +249,64 @@ A script for hunting all files that are reachable on the remote target.
 
 <a name="chap7"></a>
 ## Chapter 7: Github command and control
+Trojans - A Trojan malware is characterized by trying to be something that is not. For example, it can pretend to be an 
+plugin to wordpress, but then hide a an executable with malicious behaviour in there. One of the most challenging aspects
+of creating a solid Trojan framework is asynchronously controlling, updating and receiving data from deployed implants. 
+It is important to have a relatively universal way to push code to Trojans. There are many ways to build a command and control, but
+in this one git is used.
+
+#### Git repo structure:
+    .
+    ├── config            # Unique config files for each Trojan: the Trojans perform different tasks.
+    │   ├── trojanID.json    
+    ├── modules           # Modular code that the Trojans pick up and executes.
+    │   ├── dirlister.py
+    │   ├── environment.py 
+    └── data              # Data that the Trojans collect: data, keystrokes, screenshots etc.
+
+#### Creating modules
+Each module should expose a run function so that they can be loaded in the same way. 
+Example of a simple module: _dirlister.py_:
+<pre>
+import os
+
+def run(** args):
+    files = os.listdir('.')
+    
+    return str(files)
+</pre>
+> The module lists the files in the current directory and return them as list of strings. You can make similar simple scripts
+> like listing the environment variables (environment.py). 
+
+#### Configuration
+The config file is made so that each Trojan can perform certain actions over a period of time. We need to tell the Trojan
+which actions to perform and which modules that are responsible for these actions. Each Trojan should have it's unique config
+file, named trojanID.json. This is to sort the retrieved data, but also because each Trojan performs various tasks.
+A simple Trojan config file can look like this:
+<pre>
+[
+    {
+     "module": "dirlister"
+    },
+     "module": "environment"
+    }
+]
+</pre>
+> This config file simply tells the remote Trojan which modules to run. You can also add execution duration, number
+>of times to run the module, etc.
+
+#### Building a Github Aware Trojan
+* Do the necessary imports, define paths and TrojanID. 
+* _connect_to_github():_ define this function to authenticate the user to the git repo. Retrieve and return the current repo and
+branch. In real life this authentication process should be obfuscated. 
+* _get_file_contents(filepath):_ this function is responsible for grabbing files from the repo and read them locally, including
+the config file and the modules. 
+*  _get_trojan_config()_: retrieve the remote config file so that the trojan knows which modules to run. 
+* _store_module_results(data):_ this functions stores the retrieved data from the modules by pushing it to the git repo.
+
+#### Hacking Python's import functionality 
+We can make a class GitImporter that will load necessary modules every time they are not available. 
+* _find_module(self, fullname, path=None):_  this function will be called first to attempt to locate the module.
 
 <a name="misc"></a>
 ## MISC
@@ -265,6 +329,8 @@ Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
 ### Everything you know about SQL Injection Attacks?
 SQL injection is a kind of injection attack where an attacker injects SQL queries through an input field in the client app.
 It is one of the most common web-hacks.
+
+[Interactive sql injection demo](https://free.codebashing.com/courses/php) 
 
 **Example**
 
@@ -362,4 +428,5 @@ def do_some_hack():
 for i in range(10): 
     process = Process(target=do_some_hack)
     t.start()
+    t.join()
 </pre>
