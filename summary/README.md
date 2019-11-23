@@ -332,10 +332,16 @@ Browser -> ZAP -> Web Application. Download and test it yourself, e.g. against h
 
 <a name="XSS"></a>
 ## Cross-site scripting (XSS)
+![Alt text](figures/cross-site-scripting-example.png?raw=true)
 **Stored attacks** are those where the injected script is permanently stored on the target servers,
 such as in a database, in a message forum, visitor log, comment field, etc. 
 The victim then retrieves the malicious script from the server when it requests the stored information.
 Stored XSS is also sometimes referred to as Persistent or Type-I XSS.
+_Example:_ For example an attacker might go to an online dating site might put something like this in their profile:
+<pre>
+"Hi! My name is Dave, I enjoy long walks on the beach and <script>malicious code here</script>"
+</pre>
+Any user that tries to access Dave’s profile will become a victim to Dave’s persistent cross-site scripting attack.
 
 **Reflected attacks** are those where the injected script is reflected off the web server, such as in an error message, 
 search result, or any other response that includes some or all of the input sent to the server as part of the request. 
@@ -344,6 +350,11 @@ When a user is tricked into clicking on a malicious link, submitting a specially
 the injected code travels to the vulnerable web site, which reflects the attack back to the user’s browser. 
 The browser then executes the code because it came from a "trusted" server. 
 Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
+_Example:_ a user might receive a legitimate-looking email that claims to come from their bank. 
+The email will ask them to take some action on the bank’s website, and provide a link. The link may end up looking something like this:
+<pre>
+http://legitamite-bank.com/index.php?user=&script>here is some bad code!</script>
+</pre>
 
 <a name="sql"></a>
 ## SQL injection
