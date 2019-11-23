@@ -17,7 +17,8 @@ Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3
 8. [ Web Security](#WebSec) \
     8.1 [ XSS ](#XSS) \
     8.2 [ SQL injection ](#SQL)
-9. [ MISC (other stuff we can be asked) ](#misc)
+9. [ SpyWare ](#spyware)
+10. [ MISC (other stuff we can be asked) ](#misc)
 
 <a name="chap1"></a>
 ## Chapter 1 
@@ -333,6 +334,7 @@ Browser -> ZAP -> Web Application. Download and test it yourself, e.g. against h
 <a name="XSS"></a>
 ## Cross-site scripting (XSS)
 ![Alt text](figures/cross-site-scripting-example.png?raw=true)
+
 **Stored attacks** are those where the injected script is permanently stored on the target servers,
 such as in a database, in a message forum, visitor log, comment field, etc. 
 The victim then retrieves the malicious script from the server when it requests the stored information.
@@ -420,6 +422,80 @@ Whitelisting can be a very effective means of enforcing strict input validation 
     * Target fields that are not quoted
     * Find ways to bypass the need for certain escaped meta-characters 
     * Use stored procedures to hide the injected meta-characters 
+
+<a name="spyware"></a>
+## Spyware 
+Spyware is software or hardware that aims at collection information about a user or organisation and send the information
+back to another entity. It is often without the user's knowledge. 
+
+### Types:
+* Adware
+* Tracking cookies
+* Trojans
+* System monitors
+* Keyloggers
+* Web beacons  
+* Rootkits
+
+#### Unwanted behaviour
+Users frequently notice unwanted behavior and degradation of system performance. 
+A spyware infestation can create **unwanted CPU activity**, **disk usage**, and **network traffic**. 
+In can also rise stability issues, such as: **applications freezing**, **failure to boot**, and **system-wide crashes**.
+Spyware that interferes with networking software commonly causes difficulty connecting to the Internet. 
+
+### Keyloggers
+Keyloggers is a type of spyware or monitoring software as it logs every keystroke you take. It is typically silent, 
+so you don't know that your monitored. The malicious intent behind keyloggers can for example be to steal your credit card number
+or account info. The figure below shows a keylogger that affected thousands of Wordpress sites. You can read the full article 
+[here](https://www.bleepingcomputer.com/news/security/keylogger-found-on-nearly-5-500-infected-wordpress-sites/).
+
+![Alt text](figures/WordPress-site-keylogger.png?raw=true)
+
+#### Keylogger HW
+Usually small devices that can be fixed to the keyboard, or placed within a cable or the computer itself.
+
+#### Distribution
+Keyloggers can be implemented in both SW or HW. 
+**HW:** The HW keyloggers require physical access to the device. An attacker
+can for example install a hw keylogger through a usb stick in the keyboard.
+**SW:**  The attacker can trick the user into downloading the keylogger. The keylogger can for example be a file hidden in a package 
+that otherwise looks normal. It can also be distributed in a similar manner as other malware, e.g. as an email attachment or
+from a usb stick.  
+
+#### Detection
+Keyloggers are tricky to detect. Some signs that a keylogger is installed includes:
+* performance slow down on web browsing;
+* the mouse or keyboard pause, slow down or doesn't show up. 
+
+Remote access SW keyloggers can upload locally captured data to a remote location. This can happen through:
+* file uploading via FTP, a website or a database; 
+* periodically emailing the data to specific address; 
+* wireless transmission of data through an attached hardware system;
+* software enabling remote login to the local machine.
+
+Scanning for any of these can help to detect the SW keylogger. E.g. check for file transmission to weird addresses, 
+
+Keyloggers can also be detected by examining the background processes:
+<pre>
+ps auxww | grep <process>
+</pre>
+Where:
+* a lists all processes on a terminal, including those of other users. 
+* x lists all processes without controlling terminals.
+* u adds a column for the controlling user for each process. 
+
+#### Countermeasures
+* Don't be fooled into clicking on suspicious links. 
+* Don't leave your computer unlocked. 
+* Install an anti-keylogger. 
+* Install anti-virus program. 
+
+#### Keyloggers mentioned in class
+* LKL Linux Keylogger
+* logkeys
+* simple-key-logger
+* PyKeylogger
+* keylogger.py (in blackboard)
 
 <a name="misc"></a>
 ## MISC
