@@ -1,6 +1,6 @@
 # EthicalHacking
 
-See blackhatpy for curriculum and python scripts. 
+See summary for curriculum and blackhat-python scripts. 
 
 # Writeup PERU
 
