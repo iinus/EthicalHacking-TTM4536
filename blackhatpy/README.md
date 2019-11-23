@@ -1,8 +1,10 @@
-# Summary
-_Black Hat Python_ was published by Justin Seitz in 2014.
-The book is about writing network sniffers, manipulating packets, infecting virtual machines, creating stealthy trojans, and more. 
-Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3 without problem). This summary is written in relation to the exam in **TTM4536**. So I
+# Summary Ethical Hacking TTM4536
+This summary is written in relation to the exam in **TTM4536**. So I
 extracted the stuff the professor cares about the most + a bit DuckDuckGoing. 
+
+The book: _Black Hat Python_ was published by Justin Seitz in 2014.
+The book is about writing network sniffers, manipulating packets, infecting virtual machines, creating stealthy trojans, and more. 
+Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3 without problem). 
 
 #### Content
 1. [ Chapter 1](#chap1)
@@ -12,7 +14,10 @@ extracted the stuff the professor cares about the most + a bit DuckDuckGoing.
 5. [ Chapter 5](#chap5)
 6. [ Chapter 6](#chap6)
 7. [ Chapter 7](#chap7)
-8. [ MISC (other stuff we can be asked) ](#misc)
+8. [ Web Security](#WebSec) \
+    8.1 [ XSS ](#XSS) \
+    8.2 [ SQL injection ](#SQL)
+9. [ MISC (other stuff we can be asked) ](#misc)
 
 <a name="chap1"></a>
 ## Chapter 1 
@@ -305,14 +310,28 @@ the config file and the modules.
 * _store_module_results(data):_ this functions stores the retrieved data from the modules by pushing it to the git repo.
 
 #### Hacking Python's import functionality 
-We can make a class GitImporter that will load necessary modules every time they are not available. 
-* _find_module(self, fullname, path=None):_  this function will be called first to attempt to locate the module.
+(Why not just do this in the config files?)
+We want to be able to pull external libraries, and the Trojan should make the the modules we pull in available to all other 
+subsequent modules. For this, we can make a GitImporter class that will load necessary modules every time they are not available.
+Python allows for this functionality by adding a custom class to sys.metha_path list.  
 
-<a name="misc"></a>
-## MISC
-** Other questions we might get ** 
+<a name="WebSec"></a>
+## Web Security
+#### OWASP
+The OWASP foundation is a non-profit, open source organisation. Their goal is to make security visible so that every one
+can take informed decisions. Everyone is welcome to contribute to their projects. 
 
-### What is the difference between stored- and reflected xss?
+[OWASP WebGoat](https://github.com/WebGoat/WebGoat) - a deliberately insecure web application maintained by OWASP 
+designed to teach web application security lessons. [Solutions for the challenges](https://github.com/WebGoat/WebGoat/wiki/Main-Exploits) 
+
+[OWASP Zed Attack Proxy (ZAP)](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project) - one of the worlds most used security tools.
+The tool helps you to automatically find security vulnerabilities in web applications. ZAP is known as a MITM-application:
+Browser -> ZAP -> Web Application. Download and test it yourself, e.g. against http://testphp.vulnweb.com
+![Alt text](figures/zap.png?raw=true)
+> You can click on each of the alerts and read what ZAP did, how the attack works, and suggestions for fixes.
+
+<a name="XSS"></a>
+## Cross-site scripting (XSS)
 **Stored attacks** are those where the injected script is permanently stored on the target servers,
 such as in a database, in a message forum, visitor log, comment field, etc. 
 The victim then retrieves the malicious script from the server when it requests the stored information.
@@ -326,7 +345,8 @@ the injected code travels to the vulnerable web site, which reflects the attack 
 The browser then executes the code because it came from a "trusted" server. 
 Reflected XSS is also sometimes referred to as Non-Persistent or Type-II XSS.
 
-### Everything you know about SQL Injection Attacks?
+<a name="sql"></a>
+## SQL injection
 SQL injection is a kind of injection attack where an attacker injects SQL queries through an input field in the client app.
 It is one of the most common web-hacks.
 
@@ -389,6 +409,10 @@ Whitelisting can be a very effective means of enforcing strict input validation 
     * Target fields that are not quoted
     * Find ways to bypass the need for certain escaped meta-characters 
     * Use stored procedures to hide the injected meta-characters 
+
+<a name="misc"></a>
+## MISC
+** Other questions we might get ** 
 
 ### When setting up a virtual machine in VirtualBox, explain in brief as many system components as you can, that should be defined for the machine.
 [Virtual box settings](https://www.nakivo.com/blog/virtualbox-network-setting-guide/) - a complete guide. 
