@@ -333,19 +333,24 @@ Browser -> ZAP -> Web Application. Download and test it yourself, e.g. against h
 
 <a name="XSS"></a>
 ## Cross-site scripting (XSS)
+XSS mostly happens on web pages. It is a type of attack where the hacker injects a malicious client-side script into the web 
+page. The vulnerability exists because the user input is not exhaustively validated. The attack can be used to bypass access
+controls. 
+
 ![Alt text](figures/cross-site-scripting-example.png?raw=true)
 
-**Stored attacks** are those where the injected script is permanently stored on the target servers,
+#### Stored (persistent) XSS attacks
+Stored attacks are those where the injected script is permanently stored on the target servers,
 such as in a database, in a message forum, visitor log, comment field, etc. 
 The victim then retrieves the malicious script from the server when it requests the stored information.
-Stored XSS is also sometimes referred to as Persistent or Type-I XSS.
-_Example:_ For example an attacker might go to an online dating site might put something like this in their profile:
+_Example:_ an attacker might go to an online dating site might put something like this in their profile:
 <pre>
 "Hi! My name is Dave, I enjoy long walks on the beach and <script>malicious code here</script>"
 </pre>
-Any user that tries to access Dave’s profile will become a victim to Dave’s persistent cross-site scripting attack.
+Any user that tries to access Dave’s profile will become a victim to Dave’s persistent cross-site scripting attack. 
 
-**Reflected attacks** are those where the injected script is reflected off the web server, such as in an error message, 
+#### Reflected XSS attacks 
+In this type of XSS, the scripts are not stored. Instead, the injected script is reflected off the web server, such as in an error message, 
 search result, or any other response that includes some or all of the input sent to the server as part of the request. 
 Reflected attacks are delivered to victims via another route, such as in an e-mail message, or on some other website.
 When a user is tricked into clicking on a malicious link, submitting a specially crafted form, or even just browsing to a malicious site,
@@ -357,6 +362,29 @@ The email will ask them to take some action on the bank’s website, and provide
 <pre>
 http://legitamite-bank.com/index.php?user=&script>here is some bad code!</script>
 </pre>
+
+#### DOM-based XSS
+
+
+#### Preventive measures
+XSS can be prevented by properly escaping/encoding output. Writing such encoders yourself is not super difficult, but there
+are some pitfalls. Therefor, it is recommended to use libraries for this purpose. Many modern JS frameworks also have a 
+builtin XSS protection, like Vue (2.0+), React and Angular (2.0+).  
+
+[OWASP guide](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html):
+* RULE #1 HTML escape before inserting untrusted data into HTML element content.
+* RULE #2 Attribute escape before inserting untrusted data into HTML common attributes.
+* RULE #3 JavaScript escape before inserting untrusted data into JavaScript data values.
+* RULE #4 CSS escape and strictly validate before inserting untrusted data into HTML style property values.
+* RULE #5 URL escape before inserting untrusted data into HTML URL parameter values.
+* Rule #6 Sanitize HTML Markup with a library designed for the job.
+* Rule #7 Avoid JavaScript URL's. 
+* Rule #8 Prevent DOM based XSS. 
+
+As you can see, there are many attack vectors for XSS, and preventing all of the XSS flaws is hard. In addition to these rules,
+there are also some rules that can prevent the impact of a successful XSS attack. This includes
+setting the HttpOnly cookie, implementing a content security policy and using the X-XXS-Protection header.   
+
 
 <a name="sql"></a>
 ## SQL injection
@@ -441,31 +469,15 @@ back to another entity. It is often without the user's knowledge.
 Users frequently notice unwanted behavior and degradation of system performance. 
 A spyware infestation can create **unwanted CPU activity**, **disk usage**, and **network traffic**. 
 In can also rise stability issues, such as: **applications freezing**, **failure to boot**, and **system-wide crashes**.
-Spyware that interferes with networking software commonly causes difficulty connecting to the Internet. 
+Spyware that interferes with networking software can also cause difficulties connecting to the Internet. 
 
-### Keyloggers
+### Keylogger SW
 Keyloggers is a type of spyware or monitoring software as it logs every keystroke you take. It is typically silent, 
 so you don't know that your monitored. The malicious intent behind keyloggers can for example be to steal your credit card number
-or account info. The figure below shows a keylogger that affected thousands of Wordpress sites. You can read the full article 
+or account info. The figure below shows a keylogger SW that affected thousands of Wordpress sites. You can read the full article 
 [here](https://www.bleepingcomputer.com/news/security/keylogger-found-on-nearly-5-500-infected-wordpress-sites/).
 
 ![Alt text](figures/WordPress-site-keylogger.png?raw=true)
-
-#### Keylogger HW
-Usually small devices that can be fixed to the keyboard, or placed within a cable or the computer itself.
-
-#### Distribution
-Keyloggers can be implemented in both SW or HW. 
-**HW:** The HW keyloggers require physical access to the device. An attacker
-can for example install a hw keylogger through a usb stick in the keyboard.
-**SW:**  The attacker can trick the user into downloading the keylogger. The keylogger can for example be a file hidden in a package 
-that otherwise looks normal. It can also be distributed in a similar manner as other malware, e.g. as an email attachment or
-from a usb stick.  
-
-#### Detection
-Keyloggers are tricky to detect. Some signs that a keylogger is installed includes:
-* performance slow down on web browsing;
-* the mouse or keyboard pause, slow down or doesn't show up. 
 
 Remote access SW keyloggers can upload locally captured data to a remote location. This can happen through:
 * file uploading via FTP, a website or a database; 
@@ -473,22 +485,43 @@ Remote access SW keyloggers can upload locally captured data to a remote locatio
 * wireless transmission of data through an attached hardware system;
 * software enabling remote login to the local machine.
 
-Scanning for any of these can help to detect the SW keylogger. E.g. check for file transmission to weird addresses, 
+#### Keylogger HW
+Usually small devices that can be fixed to the keyboard, or placed within a cable or the computer itself. The keylogger HW
+can be placed inside the keyboard, attached to the keyboard or be a replacement keyboard that already have the spyware installed.
 
-Keyloggers can also be detected by examining the background processes:
+#### Distribution
+**HW:** The HW keyloggers require physical access to the device. An attacker can for example install a hw keylogger through a usb stick in the keyboard.
+
+**SW:** SW keyloggers are distributed in a similar way as other malware. For example, an attacker can trick the user into downloading the keylogger.
+The keylogger can be a file hidden in a package that otherwise looks normal. Other examples include distribution as an email attachment or
+from a usb stick.  
+
+#### Detection
+Keyloggers are tricky to detect. Some signs that a keylogger is installed includes:
+* performance slow down on web browsing;
+* the mouse or keyboard pause, slow down or doesn't show up. 
+
+The most straightforward way to detect keyloggers is by examining the background processes and google them:
 <pre>
-ps auxww | grep <process>
+$ ps auxww
 </pre>
 Where:
 * a lists all processes on a terminal, including those of other users. 
 * x lists all processes without controlling terminals.
 * u adds a column for the controlling user for each process. 
 
+Other detection methods include e.g. check for file transmission to a weird addresses, 
+check network logs etc. For the keylogger hardware, you can check for unwanted attached device. 
+
 #### Countermeasures
 * Don't be fooled into clicking on suspicious links. 
 * Don't leave your computer unlocked. 
 * Install an anti-keylogger. 
 * Install anti-virus program. 
+* Using a virtual keyboard. 
+* Since most keyloggers want to steal your credit card/account etc. you can protect your accounts with a one-time password as
+a part of the authentication process (for example: rsa code, physical key, code on phone). This prevents the _outcome_,
+not the keylogger itself.  
 
 #### Keyloggers mentioned in class
 * LKL Linux Keylogger
@@ -496,6 +529,7 @@ Where:
 * simple-key-logger
 * PyKeylogger
 * keylogger.py (in blackboard)
+* Hardware Keylogger Standalone Edition 
 
 <a name="misc"></a>
 ## MISC
