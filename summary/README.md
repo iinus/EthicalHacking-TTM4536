@@ -543,6 +543,10 @@ not the keylogger itself.
 * keylogger.py (in blackboard)
 * Hardware Keylogger Standalone Edition 
 
+<a name="crypto"></a>
+## Crypto
+
+
 <a name="misc"></a>
 ## MISC
 ** Other questions we might get ** 
@@ -604,8 +608,8 @@ Module | Description| Example usage
 [subprocess](https://docs.python.org/3/library/subprocess.html) | Allows for spawning additional processes, connecting to their input/output/error pipes and get their return codes. The module can be used to start another program. | _subprocess.run("ls -l", capture_output=True)_ - the argument "ls -la" is used to launch the process. The output is captured.
 [scapy](https://scapy.readthedocs.io/en/latest/) | Enables sending, sniffing, inspection and forging of network packets. Scapy can be used to build tools to scan, probe and attack networks.  | _sniff(filter="icmp and host 66.35.250.151", count=2)_ - sniff 2 icmp packets from 66.35.250.151. _send(IP(dst="1.2.3.4")/ICMP(), return_packets=True_) - send an ICMP packet on layer 3 to "dst" and return the sent packet.
 [ctypes](https://docs.python.org/3/library/ctypes.html) | Provides C compatible data types and allows calling functions in DLLs or other shared libs. | ctypes _c_ubyte_ - an unsigned char in C, and int/long in python.
-[struct](https://docs.python.org/2/library/struct.html) | Performs conversions between Python values and C structs represented as Python strings. Can be used to handle binary data stored in network connections. | Can for example be used to pack a given C structure (like a raw IP header ^). 
+[struct](https://docs.python.org/2/library/struct.html) | Performs conversions between Python values and C structs represented as Python strings. Can be used to handle binary data stored in network connections. | Can for example be used to pack a given C structure (like a raw IP header ^). _struct.pack('I', 0xdeadbeef)_ - packs 0xdeadbeef to b'\xef\xbe\xad\xde'.  
 [requests (urllib2)](https://2.python-requests.org/en/master/) | The best, simplest http library for python. | _req = requests.get("http://vg.no", headers=headers)_ - send a get request to vg with some headers. _req.content_ - access the response body as bytes.
 [Crypto](https://pycryptodome.readthedocs.io/en/latest/src/api.html) | Organized into several sub-packets, each dedicated to solve one area of problems. | Generation of public/private keys, hashing, encryption  
 [Paramiko](http://docs.paramiko.org/en/2.6/) | A python implementation of SSHv2. Provides client and server functionality. | _client = SSHClient()_ - initiate a ssh client. _connect(hostname, username, pwd, key ...)_ - Connect to an SSH server and authenticate to it 
-
+[pwntools](https://docs.pwntools.com/en/stable/) | A CTF framework and exploit deployment library. Can be used to assemble, disassemble, packing integers, making connections, interact with processes, etc. | _recvuntil('>')_ - command for receiving data. _sendlineafter(':','\xe5\xff')_ - send some data after the specified initialisation. _p.interactive()_ - connecting to a process and interact with it. 
