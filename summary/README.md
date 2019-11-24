@@ -597,14 +597,15 @@ for i in range(10):
 Module | Description| Example usage
 --- | --- | ---
 [sys](https://docs.python.org/3/library/sys.html) | This module provides access to some objects used or maintained by the interpreter and to functions that interact strongly with the interpreter.  | _sys.argv_ - list of command-line arguments passed to the python script. _sys.exit()_  - exit from python.
-[socket](https://docs.python.org/3/library/socket.html) | A low level network interface. Provides access to the BSD socket interface. | <pre> s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </pre> create a socket object with ipv4 address and TCP.
-[threading](https://docs.python.org/3/library/threading.html) | A way for the Python program to split itself into two or more simultaneously running tasks. |  t = threading.Thread(target=callable_object) - create a thread. callable_object is invoked by _t.run()_. 
-[multiprocess]() |  | 
-[subprocess]() | | 
-[scapy]() | | 
-[ctypes]() | | 
-[struct]() | | 
-[requests (urllib2)]() | | 
+[socket](https://docs.python.org/3/library/socket.html) | A low level network interface. Provides access to the BSD socket interface. | _s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)_ - create a socket object with ipv4 address and TCP.
+[threading](https://docs.python.org/3/library/threading.html) | A way for the Python program to split itself into two or more simultaneously running tasks in the same process space. Threading share memory space. | For speedup (several tasks can run in parallel). _t = threading.Thread(target=callable_object)_ - create a thread. callable_object is invoked by _t.run()_. 
+[multiprocess](https://docs.python.org/2/library/multiprocessing.html) | Supports spawning processes using an API similar to the threading module. | Also for speedup. _p = Process(target=callable_object)_ - spawn a process by creating a process object. It is invoked by calling _p.start()_. 
+[Nutika](https://nuitka.net/) | Source-to-source compiler that compiles Python code to C/C++. Can make the program run faster. No need to have Python installed. | 
+[subprocess](https://docs.python.org/3/library/subprocess.html) | Allows for spawning additional processes, connecting to their input/output/error pipes and get their return codes. The module can be used to start another program. | _subprocess.run("ls -l", capture_output=True)_ - the argument "ls -la" is used to launch the process. The output is captured.
+[scapy](https://scapy.readthedocs.io/en/latest/) | Enables sending, sniffing, inspection and forging of network packets. Scapy can be used to build tools to scan, probe and attack networks.  | _sniff(filter="icmp and host 66.35.250.151", count=2)_ - sniff 2 icmp packets from 66.35.250.151. _send(IP(dst="1.2.3.4")/ICMP(), return_packets=True_) - send an ICMP packet on layer 3 to "dst" and return the sent packet.
+[ctypes](https://docs.python.org/3/library/ctypes.html) | Provides C compatible data types and allows calling functions in DLLs or other shared libs. | ctypes _c_ubyte_ - an unsigned char in C, and int/long in python.
+[struct](https://docs.python.org/2/library/struct.html) | Performs conversions between Python values and C structs represented as Python strings. Can be used to handle binary data stored in network connections. | Can for example be used to pack a given C structure (like a raw IP header ^). 
+[requests (urllib2)](https://2.python-requests.org/en/master/) | The best, simplest http library for python. | _req = requests.get("http://vg.no", headers=headers)_ - send a get request to vg with some headers. _req.content_ - access the response body as bytes.
 [Crypto](https://pycryptodome.readthedocs.io/en/latest/src/api.html) | Organized into several sub-packets, each dedicated to solve one area of problems. | Generation of public/private keys, hashing, encryption  
 [Paramiko](http://docs.paramiko.org/en/2.6/) | A python implementation of SSHv2. Provides client and server functionality. | _client = SSHClient()_ - initiate a ssh client. _connect(hostname, username, pwd, key ...)_ - Connect to an SSH server and authenticate to it 
 
