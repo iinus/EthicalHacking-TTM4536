@@ -364,7 +364,16 @@ http://legitamite-bank.com/index.php?user=&script>here is some bad code!</script
 </pre>
 
 #### DOM-based XSS
+_The Document Object Model (DOM)_ is a W3C (World Wide Web Consortium) standard. It is a platform independent 
+interface that allows programs and scripts to dynamically access and modify the structure of an document. 
+The document can be HTML, XHTML or XML.
 
+In a DOM-based XSS attack, the attack payload is executed as a result of modifying the DOM environment in the victim's
+browser. The page itself (the HTTP response) does not change, but the client side code contained in 
+the page executes differently because of the malicious modifications that have occurred in the DOM environment. This
+is different from the other XSS attacks, where the attack payload is placed in response page. 
+  
+![Alt text](figures/dom-xss.png?raw=true)
 
 #### Preventive measures
 XSS can be prevented by properly escaping/encoding output. Writing such encoders yourself is not super difficult, but there
@@ -384,7 +393,6 @@ builtin XSS protection, like Vue (2.0+), React and Angular (2.0+).
 As you can see, there are many attack vectors for XSS, and preventing all of the XSS flaws is hard. In addition to these rules,
 there are also some rules that can prevent the impact of a successful XSS attack. This includes
 setting the HttpOnly cookie, implementing a content security policy and using the X-XXS-Protection header.   
-
 
 <a name="sql"></a>
 ## SQL injection
