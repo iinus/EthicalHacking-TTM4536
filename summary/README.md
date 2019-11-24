@@ -1,6 +1,6 @@
 # Summary Ethical Hacking TTM4536
-This summary is written in relation to the exam in **TTM4536**. So I
-extracted the stuff the professor cares about the most + a bit DuckDuckGoing. 
+This summary is written in relation to the exam in **TTM4536**. So I extracted the stuff the professor cares about the most + 
+a bit DuckDuckGoing. 
 
 The book: _Black Hat Python_ was published by Justin Seitz in 2014.
 The book is about writing network sniffers, manipulating packets, infecting virtual machines, creating stealthy trojans, and more. 
@@ -8,17 +8,20 @@ Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3
 
 #### Content
 1. [ Chapter 1](#chap1)
-2. [ Chapter 2](#chap2)
-3. [ Chapter 3](#chap3)
-4. [ Chapter 4](#chap4)
-5. [ Chapter 5](#chap5)
-6. [ Chapter 6](#chap6)
-7. [ Chapter 7](#chap7)
-8. [ Web Security](#WebSec) \
-    8.1 [ XSS ](#XSS) \
-    8.2 [ SQL injection ](#SQL)
-9. [ SpyWare ](#spyware)
+2. [ Chapter 2: Network Basics](#chap2)
+3. [ Chapter 3: The network](#chap3)
+4. [ Chapter 4: Owning the network with Scapy](#chap4)
+5. [ Chapter 5: Web hackery](#chap5)
+6. [ Chapter 7: Github command and control](#chap7)
+7. [ Web Security](#WebSec) \
+    7.1 [ XSS ](#XSS) \
+    7.2 [ SQL injection ](#SQL)
+8. [ SpyWare ](#spyware) \
+    8.1 [ Keyloggers ](#keyloggers)
+9. [ Crypto ](#crypto)
 10. [ MISC (other stuff we can be asked) ](#misc)
+11. [ Summary of Python modules you should know ](#modules) 
+
 
 <a name="chap1"></a>
 ## Chapter 1 
@@ -250,8 +253,6 @@ response = requests.get(url, headers=headers)
 #### Web_app_mapper.py
 A script for hunting all files that are reachable on the remote target. 
 
-<a name="chap6"></a>
-## Chapter 6: Extending Burp Proxy
 
 <a name="chap7"></a>
 ## Chapter 7: Github command and control
@@ -364,6 +365,8 @@ http://legitamite-bank.com/index.php?user=&script>here is some bad code!</script
 </pre>
 
 #### DOM-based XSS
+[Owasp DOM-based XSS](https://www.owasp.org/index.php/DOM_Based_XSS)
+
 _The Document Object Model (DOM)_ is a W3C (World Wide Web Consortium) standard. It is a platform independent 
 interface that allows programs and scripts to dynamically access and modify the structure of an document. 
 The document can be HTML, XHTML or XML.
@@ -479,6 +482,7 @@ A spyware infestation can create **unwanted CPU activity**, **disk usage**, and 
 In can also rise stability issues, such as: **applications freezing**, **failure to boot**, and **system-wide crashes**.
 Spyware that interferes with networking software can also cause difficulties connecting to the Internet. 
 
+<a name="keyloggers"></a>
 ### Keylogger SW
 Keyloggers is a type of spyware or monitoring software as it logs every keystroke you take. It is typically silent, 
 so you don't know that your monitored. The malicious intent behind keyloggers can for example be to steal your credit card number
@@ -583,3 +587,24 @@ for i in range(10):
     t.start()
     t.join()
 </pre>
+
+<a name="modules"></a>
+## Summary of all Python modules/packages you should know 
+> Note that is a brief summary meant as a repetition, and examples are not exhaustive. You can read more in the earlier chapters
+> or visit the links.  
+
+
+Module | Description| Example usage
+--- | --- | ---
+[sys](https://docs.python.org/3/library/sys.html) | This module provides access to some objects used or maintained by the interpreter and to functions that interact strongly with the interpreter.  | _sys.argv_ - list of command-line arguments passed to the python script. _sys.exit()_  - exit from python.
+[socket](https://docs.python.org/3/library/socket.html) | A low level network interface. Provides access to the BSD socket interface. | <pre> s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </pre> create a socket object with ipv4 address and TCP.
+[threading](https://docs.python.org/3/library/threading.html) | A way for the Python program to split itself into two or more simultaneously running tasks. |  t = threading.Thread(target=callable_object) - create a thread. callable_object is invoked by _t.run()_. 
+[multiprocess]() |  | 
+[subprocess]() | | 
+[scapy]() | | 
+[ctypes]() | | 
+[struct]() | | 
+[requests (urllib2)]() | | 
+[Crypto](https://pycryptodome.readthedocs.io/en/latest/src/api.html) | Organized into several sub-packets, each dedicated to solve one area of problems. | Generation of public/private keys, hashing, encryption  
+[Paramiko](http://docs.paramiko.org/en/2.6/) | A python implementation of SSHv2. Provides client and server functionality. | _client = SSHClient()_ - initiate a ssh client. _connect(hostname, username, pwd, key ...)_ - Connect to an SSH server and authenticate to it 
+
