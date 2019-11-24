@@ -545,7 +545,55 @@ not the keylogger itself.
 
 <a name="crypto"></a>
 ## Crypto
+### RSA
+RSA keygen (taken from [Thangavel et al.](https://www.sciencedirect.com/science/article/abs/pii/S2214212614001409))
 
+![Alt text](figures/rsa-keygen.jpg?raw=true)
+
+RSA key generation is based on the factorisation problem - which is a hard problem. If you are in doubt, try to calculate
+? * ? = 281512008712700373730275954373439628511. 
+
+#### Factorizing RSA? 
+Although factorization is a hard problem, there's a different problem that's much easier: finding the gcd of two numbers.
+If someone _reused_ the RSA keys, this could give a possibility to factorizing them. Consider that the prime b is reused in two keys.
+Then there would be only three different primes: a, b, c, instead of four (a, b, c, d). 
+So the public values are n1 = a * b and n2 = b * c. If we calculate gcd(n1, n2) we get b. 
+The "good security"-case would have been gcd(ab, cd) = 1 - which reveals nothing. 
+So now we can calculate a = n1/b and c = n2/b which is enough to retrieve both the private keys. 
+(if you didn't understand it, read [this](http://www.loyalty.org/~schoen/rsa/)). 
+
+#### CTF003 - Guinea
+> Note: There exist a much easier tool for solving this CTF.
+
+It is based on the vulnerability described above. We are given a bunch of .pem files, and two encrypted files. We want to
+find the private keys to decrypt the files. So we basically go through all of the public keys from the .pem files and 
+check if any two of them have a gcd greater than 1. If they do, we can use them to decrypt the encrypted files. 
+
+The most important Python code to do this:
+<pre>
+for pemfile in pemfiles:
+    public_key_from_pemfile = RSA.importKey(open(pemfile, "rb"))
+    public_keys.append(public_key_from_pemfile)
+</pre>
+> Go through all the pem files and use RSA.importKey to import the public key from the pemfile. 
+> The public keys can be stored in a list to iterate over later.
+
+<pre>
+for i in range (len(public_keys) - 1 ):
+    for j in range (i+1, len(public_keys)):
+        n1 = public_keys[i]
+        n2 = public_keys[j]
+        gcd_n1_n2 = Crypto.Util.number.GCD(n1, n2)
+        
+        if gcd_n1_n2 != 1 # We found right keys  
+        ... 
+</pre>
+
+### Crypto in Python 
+There are several subpackages in Python within the cryptographic area that are mentioned in class. 
+Nice summary from the [API docs](https://pycryptodome.readthedocs.io/en/latest/src/api.html):
+
+![Alt text](figures/Crypto.png?raw=true)
 
 <a name="misc"></a>
 ## MISC
