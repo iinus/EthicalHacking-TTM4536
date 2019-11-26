@@ -1,4 +1,13 @@
 # Summary Ethical Hacking TTM4536
+** REKLAME **
+
+Fikk du et lite stikk i hjertet når du hørte hvordan grisene egentlig har det? Får du litt vondt inni deg når du vet at 
+dyrene du spiser til middag aldri har sett dagens lys? Send UT AV MØRKET til 2474 og bidra med litt lommerusk (85kr)!
+https://www.dyrevern.no/ut-av-morket
+
+==========================================================
+
+
 This summary is written in relation to the exam in **TTM4536**. So I extracted the stuff the professor cares about the most + 
 a bit DuckDuckGoing. 
 
