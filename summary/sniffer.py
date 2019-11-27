@@ -8,7 +8,7 @@ import sys
 from ctypes import *
 from netaddr import IPNetwork, IPAddress
 
-host_to_listen_on = ""  # E.g. use ifconfig and set this to your ip
+host_to_listen_on = "127.0.0.1"  # E.g. use ifconfig and set this to your ip
 subnet = "129.241.0.0/24"
 socket_protocol = socket.IPPROTO_ICMP
 windows = "nt"
@@ -37,6 +37,7 @@ class IP(Structure):
 
         # human readable IP addresses
         self.src_address = socket.inet_ntoa(struct.pack("@I", self.src))
+        print(self.src_address)
         self.dst_address = socket.inet_ntoa(struct.pack("@I", self.dst))
 
         # human readable protocol
