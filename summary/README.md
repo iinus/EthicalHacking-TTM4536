@@ -40,9 +40,13 @@ is based on Debian. It comes with a bunch of hacking-tools installed from before
 
 <a name="chap2"></a>
 ## Chapter 2: Network Basics
-[Socket module](https://docs.python.org/3/library/socket.html)
+[Socket module](https://docs.python.org/3/library/socket.html) -  A socket is one endpoint of a two-way communication 
+link between two programs running on the network. In python, we can use the socket module to create socket objects. When
+the socket object is created, we must pass to constants: one representing the address family we wish to use (e.g. ipv4/ipv6),
+and one representing the socket type (e.g. raw, udp, tcp).     
 
 ### TCP client
+* import socket
 Three steps:
 * Create socket: client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 * Connect the client: client.connect(target_host, target_port)
@@ -53,25 +57,52 @@ Important parameters:
 * SOC_STREAM: this will be a TCP client. 
 
 ### UDP client
+* import socket
 Similar to TCP client, but:
 * UDP is connectionless so we don't connect the client. 
 * SOC_DGRAM: says it will be a UDP client (instead of SOC_STREAM)
 
 ### TCP server
+* Import socket and threading. The threading module will be used to handle more than 1 connection simultaneously. 
 * Create socket
 * server.bind(ip, port):  _bind()_ is used to associate the socket with the server address. 
 * start to listen: _server.listen(n)_ n means that we have maximum n connections. 
+<pre>
+number_of_connections = 1
+TCP = socket.SOCK_STREAM
+ipv4 = socket.AF_INET
+
+server_socket = socket.socket(ipv4, TCP)  
+
+server_socket.bind(('localhost', 1234))
+server_socket.listen(number_of_connections)
+print("[+] Listening...")
+</pre>
 * Make a client handler function that can receive and respond to the client. The function should take 
-a client socket as param. 
+a client socket as param:
+<pre>
+def handle_client(client_socket):
+    request = client_socket.recv(1024).decode()
+    print("[+] Received: " + str(request))
+    client_socket.send("ACK".encode())
+    client_socket.close()
+</pre>
 * Wait for incoming connections. When a client connects, we receive the client socket. Create
-a threading object that points to the client handler function. Pass the client socket with it. 
+a threading object that points to the client handler function. Pass the client socket with it:
+<pre>
+while True:
+    client, address = server_socket.accept()
+    client_handler = threading.Thread(target=handle_client, args=(client,))
+    client_handler.start()
+</pre>
 
 ### Replacing netcat
 [netcat](https://en.wikipedia.org/wiki/Netcat) - used to read or write from network connections using
 either UDP or TCP. 
 
 [subprocess](https://docs.python.org/3/library/subprocess.html) - The subprocess module allows you to spawn new processes,
- connect to their input/output/error pipes, and obtain their return codes.  
+connect to their input/output/error pipes, and obtain their return codes. In this case, we use subprocess to execute bash commands
+after the shell is obtained and obtain the output for these commands. 
 
 Why replace netcat? We can imagine a scenario where you hacked into a network NETX, where netcat is **not** installed.
 NETX has Python installed.
@@ -80,13 +111,13 @@ Another scenario where this can be useful is in situations where you need to add
 to netcat. Then, writing your own can be useful. 
 
 [replacing netcat with python](https://www.cybrary.it/0p3n/create-netcat-replacement-python-part-1/) - article
-
+* import sys, socket, threading and subprocess. For options I recommend optparse: from optparse import OptionParser. 
 * Specify options like target_host, target_port, command, command_shell. 
 * Netcat python will have two main functionalities: listen (server) and not listen (client)
 * After the server binds and the client connects, we can start with command_shell and commands.
-* Use subprocess to execute commands. 
+* Use subprocess to execute commands, for instance "cat file.txt". 
 
-Try it out! 
+Try it out! (Press Ctrl + D before you execute commands.)
 
 ![Alt text](figures/pycat.png?raw=true)
 

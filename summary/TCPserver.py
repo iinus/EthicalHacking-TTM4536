@@ -3,12 +3,14 @@
 import socket
 import threading
 
-# create socket
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # SOCK_STREAM = TCP
+number_of_connections = 1
+TCP = socket.SOCK_STREAM
+ipv4 = socket.AF_INET
 
-# Bind socket to port
-server.bind(('localhost', 1234))
-server.listen(1)  # 1 connection
+server_socket = socket.socket(ipv4, TCP)
+
+server_socket.bind(('localhost', 1234))
+server_socket.listen(number_of_connections)
 print("[+] Listening...")
 
 
@@ -20,6 +22,6 @@ def handle_client(client_socket):
 
 
 while True:
-    client, address = server.accept()
+    client, address = server_socket.accept()
     client_handler = threading.Thread(target=handle_client, args=(client,))
     client_handler.start()
