@@ -2,17 +2,19 @@
 
 import socket
 
+ipv4 = socket.AF_INET
+TCP = socket.SOCK_STREAM
 server_address = ('localhost', 1234)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect(server_address)
+client_socket = socket.socket(ipv4, TCP)
+client_socket.connect(server_address)
 
 try:
-    message = "hello!"
-    client.send(message.encode())
-    response = client.recv(1234)
+    message = "halloen!"
+    client_socket.send(message.encode())
+    response = client_socket.recv(1234)
     print("[+] response: " + str(response))
 finally:
-    client.close()
+    client_socket.close()
     print("[+] closed connection ")
 

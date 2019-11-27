@@ -53,6 +53,26 @@ Three steps:
 * Connect the client: client.connect(target_host, target_port)
 * start sending and receiving 
 
+<pre>
+import socket
+
+ipv4 = socket.AF_INET
+TCP = socket.SOCK_STREAM
+server_address = ('localhost', 1234)
+
+client_socket = socket.socket(ipv4, TCP)
+client_socket.connect(server_address)
+
+try:
+    message = "halloen!"
+    client_socket.send(message.encode())
+    response = client_socket.recv(1234)
+    print("[+] response: " + str(response))
+finally:
+    client_socket.close()
+    print("[+] closed connection ")
+</pre>
+
 Important parameters:
 * AF_INET: we're using standard ipv4 address or a common hostname.
 * SOC_STREAM: this will be a TCP client. 
@@ -113,11 +133,27 @@ Another scenario where this can be useful is in situations where you need to add
 to netcat. Then, writing your own can be useful. 
 
 [replacing netcat with python](https://www.cybrary.it/0p3n/create-netcat-replacement-python-part-1/) - article
-* import sys, socket, threading and subprocess. For options I recommend optparse: from optparse import OptionParser. 
-* Specify options like target_host, target_port, command, command_shell. 
+* import _sys, socket, threading_ and _subprocess_. For options I recommend optparse: from optparse import OptionParser.
+    * sys will be used to capture raw user input. This is useful after the shell has been initiated and the user wants to run
+    commands.
+    * socket is used to create our sockets that essentially enable the communication between the two endpoints.
+    * threading is used to let our server handle more than 1 client connection simultaneously. 
+    * subprocess is used to spawn a new process that executes shell commands and capture its output.
+* Specify options that the user can chose from; like target_host, target_port, command, command_shell. 
 * Netcat python will have two main functionalities: listen (server) and not listen (client)
 * After the server binds and the client connects, we can start with command_shell and commands.
-* Use subprocess to execute commands, for instance "cat file.txt". 
+* Use subprocess to execute commands, for instance "cat file.txt". This is done in the function run_command:
+<pre>
+def run_command(command):
+    output = ""
+    try:
+        output = subprocess.run(command, check=True, shell=True, stdout=subprocess.PIPE)
+        print("[+] Command output: " + str(output.stdout))
+    except:
+        print("[-] Failed to execute command :(")
+
+    return (output.stdout).decode('utf-8')
+</pre>
 
 Try it out! (Press Ctrl + D before you execute commands.)
 
@@ -126,7 +162,7 @@ Try it out! (Press Ctrl + D before you execute commands.)
 ### TCP Proxy
 A proxy is an intermediate for requests between two communicating parts. To build a proxy server in Python:
 * Import _sys, socket_ and _threading_:
-    * The sys module is used to access command-line arguments passed to the script;
+    * The sys module is used here to access command-line arguments passed to the script;
     * socket is as usual used as the ending points for our communication - it enables sending an receiving of data;
     * threading is used to enable more than 1 connection at the time. 
 * Implement a server loop that listens for connections. 
