@@ -623,12 +623,23 @@ a part of the authentication process (for example: rsa code, physical key, code 
 not the keylogger itself.  
 
 #### Keyloggers mentioned in class
+* keylogger.py (in blackboard): 
+    * import sys, os, struct. 
+    * Define a file to record the keystrokes. 
+    * The keylogger registers keystroke **events**. The keylogger receives an event each time the user presses or releases a key. 
+    Every OS has its specific structure to describe the events. So the keylogger implements logic on how to interpret it.
+    * Define the keyboard layout, e.g. US, Norwegian etc. 
 * LKL Linux Keylogger
 * logkeys
 * simple-key-logger
 * PyKeylogger
-* keylogger.py (in blackboard)
-* Hardware Keylogger Standalone Edition 
+* Hardware Keylogger Standalone Edition: a tiny hw device that can be attached between a keyboard and a computer. Keeps a 
+record of all the keystrokes typed on the computer. It is totally transparent to the end-user. 
+* Hardware Keylogger Keyboard Edition: is a keyboard that looks and behaves like a normal one. But it keeps a record of the
+keystrokes typed on it. The strokes are kept in a non-volatile memory so the keyboard can be unplugged and the strokes retrieved
+on another computer. 
+* KeyGhost Hardware Keylogger: a tiny hw device that can be attached between a keyboard and a computer.
+* KeyCatcher Keystroke logger: a tiny hw device that can be attached between a keyboard and a computer.
 
 <a name="crypto"></a>
 ## Crypto
@@ -726,6 +737,8 @@ for i in range(10):
     t.start()
     t.join()
 </pre>
+
+Another way of speeding up Python is to use Nutika. Nutika compiles Python to C/C++. 
 
 <a name="modules"></a>
 ## Summary of all Python modules/packages you should know 
