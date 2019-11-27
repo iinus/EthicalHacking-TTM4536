@@ -35,18 +35,19 @@ Unfortunately, it is written in Python 2.7 (but I wrote a couple of them in py 3
 
 <a name="chap1"></a>
 ## Chapter 1 
-The book walks through setting up a VM for Kali Linux (but I'm sticking to my Mac<3 for obvious reasons). Kali was designed by Offensive Security, and 
+The book walks through setting up a VM for Kali Linux. Kali was designed by Offensive Security, and 
 is based on Debian. It comes with a bunch of hacking-tools installed from before, e.g. Hydra (password cracking) and Metasploit (known exploits).
 
 <a name="chap2"></a>
 ## Chapter 2: Network Basics
 [Socket module](https://docs.python.org/3/library/socket.html) -  A socket is one endpoint of a two-way communication 
 link between two programs running on the network. In python, we can use the socket module to create socket objects. When
-the socket object is created, we must pass to constants: one representing the address family we wish to use (e.g. ipv4/ipv6),
+the socket object is created, we must pass two constants: one representing the address family we wish to use (e.g. ipv4/ipv6),
 and one representing the socket type (e.g. raw, udp, tcp).     
 
 ### TCP client
 * import socket
+
 Three steps:
 * Create socket: client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 * Connect the client: client.connect(target_host, target_port)
@@ -58,6 +59,7 @@ Important parameters:
 
 ### UDP client
 * import socket
+
 Similar to TCP client, but:
 * UDP is connectionless so we don't connect the client. 
 * SOC_DGRAM: says it will be a UDP client (instead of SOC_STREAM)
@@ -219,6 +221,8 @@ Address Resolution Protocol (ARP) poisoning is when an attacker sends falsified 
 Once the attacker’s MAC address is linked to an authentic IP address, the attacker can receive any messages directed
 to the legitimate MAC address. As a result, the attacker can intercept, modify or block communicates to the legitimate MAC address.
 
+![Alt text](figures/arp.png?raw=true)
+
 **ARP cache poisoning with Scapy**
 
 [Article](https://medium.com/datadriveninvestor/arp-cache-poisoning-using-scapy-d6711ecbe112)
@@ -305,7 +309,6 @@ headers = {'user-agent': 'Googlebot'}
 response = requests.get(url, headers=headers)
 </pre>
  
-
 
 <a name="chap7"></a>
 ## Chapter 7: Github command and control
