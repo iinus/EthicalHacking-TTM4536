@@ -457,7 +457,7 @@ setting the HttpOnly cookie, implementing a content security policy and using th
 ## CSRF 
 With this attack, a victim is forced to execute actions on behalf of an attacker. 
 
-#### Mitigation
+#### Example
 Alice wishes to transfer 1000kr to Bob using the bank.com web application that is vulnerable to CSRF. 
 Maria is an attacker that wants to trick Alice into sending the money to her instead. 
 
