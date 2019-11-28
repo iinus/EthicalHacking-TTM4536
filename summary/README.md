@@ -742,6 +742,8 @@ Nice summary from the [API docs](https://pycryptodome.readthedocs.io/en/latest/s
 
 ![Alt text](figures/Crypto.png?raw=true)
 
+Some examples follow below: 
+
 #### Encrypting and decrypting with AES
 <pre>
 from Crypto.Random import get_random_bytes
@@ -761,6 +763,15 @@ def decrypt(ciphertext):
     return plaintext
 </pre>
 
+#### Generating public and private keys 
+<pre>
+from Crypto.PublicKey import RSA
+
+key = RSA.generate(2048)
+
+private_key = key.export_key()
+public_key = key.public_key().export_key()
+</pre>
 
 <a name="misc"></a>
 ## MISC
@@ -809,7 +820,7 @@ for i in range(10):
 
 Another way of speeding up Python is to use Nutika. Nutika compiles Python to C/C++. 
 
-#### Pwntools
+### Pwntools
 "pwn" means to compromise or control another computer, web site, gateway device, or application. 
 It is synonymous with one of the definitions of hacking or cracking. 
 
