@@ -8,8 +8,8 @@ import sys
 from ctypes import *
 from netaddr import IPNetwork, IPAddress
 
-host_to_listen_on = "127.0.0.1"  # E.g. use ifconfig and set this to your ip
-subnet = "129.241.0.0/24"
+host_to_listen_on = ""  # E.g. use ifconfig and set this to your ip
+subnet = "192.168.1.0/24"
 socket_protocol = socket.IPPROTO_ICMP
 windows = "nt"
 

